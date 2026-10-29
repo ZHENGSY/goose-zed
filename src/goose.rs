@@ -91,17 +91,17 @@ impl GooseExtension {
             }
         };
 
-        let executable = if platform == zed::Os::Windows {
+        let executable = if matches!(platform, zed::Os::Windows) {
             "goose.exe"
         } else {
             "goose"
         };
-        let archive_type = if platform == zed::Os::Windows {
+        let archive_type = if matches!(platform, zed::Os::Windows) {
             zed::DownloadedFileType::Zip
         } else {
             zed::DownloadedFileType::GzipTar
         };
-        let extension = if platform == zed::Os::Windows {
+        let extension = if matches!(platform, zed::Os::Windows) {
             "zip"
         } else {
             "tar.gz"
@@ -234,13 +234,14 @@ fn find_file(directory: &str, name: &str) -> Option<String> {
     let mut pending = vec![directory.to_string()];
 
     while let Some(directory) = pending.pop() {
-        let entries = fs::read_dir(&directory).ok()?;
-        for entry in entries.flatten() {
-            let path = entry.path();
-            if path.is_dir() {
-                pending.push(path.to_string_lossy().into_owned());
-            } else if path.file_name().and_then(|file_name| file_name.to_str()) == Some(name) {
-                return Some(path.to_string_lossy().into_owned());
+        if let Ok(entries) = fs::read_dir(&directory) {
+            for entry in entries.flatten() {
+                let path = entry.path();
+                if path.is_dir() {
+                    pending.push(path.to_string_lossy().into_owned());
+                } else if path.file_name().and_then(|file_name| file_name.to_str()) == Some(name) {
+                    return Some(path.to_string_lossy().into_owned());
+                }
             }
         }
     }
