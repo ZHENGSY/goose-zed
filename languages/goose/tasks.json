@@ -1,0 +1,18 @@
+[
+  {
+    "label": "goose run",
+    "command": "goose",
+    "args": ["run", "$ZED_FILE"],
+    "tags": ["goose-run"]
+  },
+  {
+    "label": "goose check",
+    "command": "goose",
+    "args": ["check", "$ZED_FILE"]
+  },
+  {
+    "label": "goose build",
+    "command": "goose",
+    "args": ["build", "$ZED_FILE"]
+  }
+]

@@ -1,0 +1,21 @@
+id = "goose"
+name = "Goose"
+version = "0.1.0"
+schema_version = 1
+description = "Goose language support: syntax highlighting, the Goose language server (diagnostics, hover, go to definition, references, rename, symbols, completion, signature help, inlay hints, folding), snippets and run tasks."
+authors = ["Goose contributors"]
+repository = "https://github.com/aardappel/goose"
+
+snippets = ["./snippets/goose.json"]
+
+[language_servers.goose]
+name = "Goose LSP"
+languages = ["Goose"]
+
+[grammars.goose]
+# The grammar lives in this repository; Zed's grammar loader clones it and
+# compiles the checked-in parser at `path`. Replace the file:// URL with the
+# published repository URL and the rev with a commit SHA before distributing.
+repository = "file:///Users/zhengsiyu/Documents/utilities/goose-v2026.3-macos-arm64/zed"
+rev = "REPLACE_WITH_COMMIT_SHA"
+path = "tree-sitter-goose"

@@ -1,0 +1,9 @@
+[
+  { "token_type": "namespace", "style": ["namespace"] },
+  { "token_type": "struct", "style": ["type"] },
+  { "token_type": "enum", "style": ["type"] },
+  { "token_type": "enumMember", "style": ["variant", "constant"] },
+  { "token_type": "typeParameter", "style": ["type"] },
+  { "token_type": "property", "style": ["property"] },
+  { "token_type": "method", "style": ["function"] }
+]
