@@ -139,8 +139,8 @@
   "," ";" ":" "::" "."
 ] @punctuation.delimiter
 
-; Builtins at the end, so they win over the generic call/identifier patterns.
-((identifier) @function.builtin
+; Builtins at the end, so they win over the generic call patterns.
+((call_expression function: (identifier) @function.builtin)
  (#any-of? @function.builtin
    "print" "str" "format" "assert" "abort" "exit" "hardware_threads"
    "thread_spawn" "thread_wait" "qput" "qget" "qpoll" "default" "copy"
