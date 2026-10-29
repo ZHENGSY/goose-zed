@@ -56,10 +56,8 @@ yourself, extract it so that `bin/clang` sits directly in
 The grammar in `tree-sitter-goose/` is checked in already generated
 (`src/parser.c`), because Zed compiles the parser and does not run
 `tree-sitter generate` itself. `extension.toml` points Zed at this directory
-with a `file://` URL, since Zed only loads grammars from a git repository;
-this directory is already one. If you move or copy it, update the
-`repository` URL in `extension.toml` (or point it at a published grammar
-repository) and install the dev extension again.
+through the published repository URL, with `rev` set to a commit on `main`
+that contains the generated parser.
 
 If you change `grammar.js`, regenerate the parser from `tree-sitter-goose/`:
 
@@ -125,16 +123,23 @@ The tasks use `goose` from `$PATH`. If the compiler is not on `PATH`, edit
 
 ## Publishing
 
-This directory is laid out as a standalone extension repository, with the
-grammar vendored in `tree-sitter-goose/`. To publish it:
+This directory is laid out as a standalone extension repository at
+[github.com/ZHENGSY/goose-zed](https://github.com/ZHENGSY/goose-zed), with the
+grammar vendored in `tree-sitter-goose/`. `extension.toml` already points
+`repository` at that URL and `rev` at a commit that contains the generated
+`src/parser.c`.
 
-1. Put this directory in its own Git repository (or keep it under the Goose
-   repository, as the VS Code extension is) and push it.
-2. Set `repository` in `extension.toml` to that URL, and `rev` to a commit SHA
-   that contains the generated `src/parser.c`.
-3. Open a PR against
-   [zed-industries/extensions](https://github.com/zed-industries/extensions)
-   adding a submodule for the repository.
+To publish to the Zed extension registry, open a PR against
+[zed-industries/extensions](https://github.com/zed-industries/extensions)
+adding this repository as a submodule under `extensions/goose`:
+
+```sh
+git submodule add https://github.com/ZHENGSY/goose-zed extensions/goose
+```
+
+and add a matching entry to that repo's top-level `extensions.toml`. After a
+grammar change, bump `rev` here to the new commit that contains the regenerated
+parser before submitting.
 
 The grammar is derived from `aardappel/goose`'s `tree-sitter/` directory and
 is Apache-2.0, like Goose itself.
