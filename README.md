@@ -44,6 +44,15 @@ x86-64. On other platforms, install Goose yourself and put `goose` on `PATH`.
    then choose this `zed/` directory.
 3. Open a `.goose` file. The language server starts automatically.
 
+The first build also downloads wasi-sdk 34 (~180 MB) from GitHub to
+`~/Library/Application Support/Zed/extensions/build/`, because that is what
+compiles the C parser to WebAssembly. On a slow connection the build appears to
+hang at `downloading wasi-sdk`. Either wait, or fetch
+`wasi-sdk-34.0-arm64-macos.tar.gz` (adjust the platform) from the
+[wasi-sdk releases](https://github.com/WebAssembly/wasi-sdk/releases/tag/wasi-sdk-34)
+yourself, extract it so that `bin/clang` sits directly in
+`extensions/build/wasi-sdk/`, then install the dev extension again.
+
 The grammar in `tree-sitter-goose/` is checked in already generated
 (`src/parser.c`), because Zed compiles the parser and does not run
 `tree-sitter generate` itself. `extension.toml` points Zed at this directory
