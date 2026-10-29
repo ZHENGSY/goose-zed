@@ -7,8 +7,8 @@
 use std::fs;
 
 use zed_extension_api::{
-    self as zed, serde_json, settings::LspSettings, LanguageServerId, LanguageServerInstallationStatus,
-    Result, Worktree,
+    self as zed, serde_json, settings::LspSettings, LanguageServerId,
+    LanguageServerInstallationStatus, Result, Worktree,
 };
 
 const LANGUAGE_SERVER_ID: &str = "goose";

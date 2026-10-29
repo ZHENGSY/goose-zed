@@ -24,8 +24,8 @@ rename, symbols, completion, signature help, inlay hints and folding.
 
 ## Requirements
 
-A Goose compiler with `goose lsp` (Goose v2026.1 or later). The extension
-looks for it in this order:
+A Goose compiler that has `goose lsp` (run `goose lsp --help` to check). The
+extension looks for it in this order:
 
 1. `lsp.goose.binary.path` from Zed settings;
 2. `goose` on `$PATH` (Zed uses your login shell's `PATH`);
