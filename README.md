@@ -45,8 +45,14 @@ x86-64. On other platforms, install Goose yourself and put `goose` on `PATH`.
 3. Open a `.goose` file. The language server starts automatically.
 
 The grammar in `tree-sitter-goose/` is checked in already generated
-(`src/parser.c`). If you change `grammar.js`, regenerate it from that
-directory:
+(`src/parser.c`), because Zed compiles the parser and does not run
+`tree-sitter generate` itself. `extension.toml` points Zed at this directory
+with a `file://` URL, since Zed only loads grammars from a git repository;
+this directory is already one. If you move or copy it, update the
+`repository` URL in `extension.toml` (or point it at a published grammar
+repository) and install the dev extension again.
+
+If you change `grammar.js`, regenerate the parser from `tree-sitter-goose/`:
 
 ```sh
 npm install                 # installs the pinned tree-sitter CLI
