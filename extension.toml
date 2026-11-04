@@ -3,7 +3,7 @@ name = "Goose"
 version = "0.1.0"
 schema_version = 1
 description = "Goose language support: syntax highlighting, the Goose language server (diagnostics, hover, go to definition, references, rename, symbols, completion, signature help, inlay hints, folding), snippets and run tasks."
-authors = ["Goose contributors"]
+authors = ["Simon Zheng"]
 repository = "https://github.com/ZHENGSY/goose-zed"
 
 snippets = ["./snippets/goose.json"]
@@ -17,5 +17,5 @@ languages = ["Goose"]
 # compiles the checked-in parser at `path`. `rev` points at a commit on main
 # that contains the generated `src/parser.c`.
 repository = "https://github.com/ZHENGSY/goose-zed"
-rev = "8a0cb4920e603cef945b942393493d5057fc4f64"
+rev = "3ade04b939aa171f4a7be2e9e94aa42cf7d00fa2"
 path = "tree-sitter-goose"

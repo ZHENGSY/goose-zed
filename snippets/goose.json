@@ -154,5 +154,70 @@
       "var ${1:items}: ${2:i64}[>..<] = [];\n$0"
     ],
     "description": "Grow-shrink array"
+  },
+  "Fixed array": {
+    "prefix": "arrk",
+    "body": [
+      "var ${1:items}: ${2:i64}[${3:16}] = [${4:0}; ${3:16}];",
+      "$0"
+    ],
+    "description": "Fixed-size array T[k], known at compile time"
+  },
+  "Frozen array": {
+    "prefix": "arrfrozen",
+    "body": [
+      "var ${1:items}: ${2:i64}[] = [];",
+      "$0"
+    ],
+    "description": "Array sized at construction, frozen after"
+  },
+  "Capacity array": {
+    "prefix": "arrcap",
+    "body": [
+      "var ${1:items}: ${2:i64}[..] = [];",
+      "$0"
+    ],
+    "description": "Array with capacity chosen at construction; in-place grow/shrink up to it"
+  },
+  "Limited array": {
+    "prefix": "arrlimit",
+    "body": [
+      "var ${1:items}: ${2:i64}[..${3:k}] = [];",
+      "$0"
+    ],
+    "description": "Array with fixed capacity k; in-place grow/shrink within it"
+  },
+  "Reusable pool": {
+    "prefix": "reusable",
+    "body": [
+      "reusable ${1:name}: ${2:i64}[>..];",
+      "$0"
+    ],
+    "description": "Grow-only array paired with a hidden freelist"
+  },
+  "Let binding": {
+    "prefix": "let",
+    "body": [
+      "let ${1:name}${2: = ${3:value}};",
+      "$0"
+    ],
+    "description": "Binding that cannot be reassigned"
+  },
+  "Const binding": {
+    "prefix": "const",
+    "body": [
+      "const ${1:name}${2: = ${3:value}};",
+      "$0"
+    ],
+    "description": "Binding whose contents are read-only"
+  },
+  "Loop": {
+    "prefix": "loop",
+    "body": [
+      "loop {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Infinite loop"
   }
 }

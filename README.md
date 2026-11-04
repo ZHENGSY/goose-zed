@@ -16,7 +16,9 @@ rename, symbols, completion, signature help, inlay hints and folding.
   indentation, folding and document/workspace outline.
 - Diagnostics as you type, hover, go to definition, find references, rename,
   document and workspace symbols, completion, signature help, inlay hints.
-- Snippets: `main`, `fn`, `struct`, `enum`, `for`, `guard`, `match`, …
+- Snippets: `main`, `fn`, `struct`, `enum`, `for`, `match`, `guard`,
+  `loop`, `let`, `const`, and the full array family (`T[k]`, `T[]`, `T[..]`,
+  `T[..k]`, `T[>..]` grow-only, `T[>..<]` grow-shrink, `reusable`).
 - Tasks: `goose run`, `goose check`, `goose build` (task runner), and a run
   button above `fn main`.
 - The Goose LSP's semantic tokens, when enabled in Zed with

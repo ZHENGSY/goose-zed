@@ -193,11 +193,9 @@ impl zed::Extension for GooseExtension {
         _language_server_id: &LanguageServerId,
         worktree: &Worktree,
     ) -> Result<Option<serde_json::Value>> {
-        let options = LspSettings::for_worktree(LANGUAGE_SERVER_ID, worktree)
+        Ok(LspSettings::for_worktree(LANGUAGE_SERVER_ID, worktree)
             .ok()
-            .and_then(|settings| settings.initialization_options)
-            .unwrap_or_else(|| serde_json::json!({}));
-        Ok(Some(options))
+            .and_then(|settings| settings.initialization_options))
     }
 }
 
