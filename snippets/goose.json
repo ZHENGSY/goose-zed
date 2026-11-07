@@ -193,7 +193,7 @@
       "reusable ${1:name}: ${2:i64}[>..];",
       "$0"
     ],
-    "description": "Grow-only array paired with a hidden freelist"
+    "description": "Grow-only array paired with a hidden freelist (deprecated in v2026.4: prefer slot_pool)"
   },
   "Let binding": {
     "prefix": "let",
@@ -238,5 +238,21 @@
       "}"
     ],
     "description": "Run a block when the enclosing block exits"
+  },
+  "Slot pool": {
+    "prefix": "slot_pool",
+    "body": [
+      "var ${1:p} = slot_pool<${2:i64}> {};",
+      "$0"
+    ],
+    "description": "Individual-slot pool with stable backing storage (v2026.4)"
+  },
+  "Slice pool": {
+    "prefix": "slice_pool",
+    "body": [
+      "var ${1:q} = slice_pool<${2:i64}> {};",
+      "$0"
+    ],
+    "description": "Contiguous-run pool with stable backing storage (v2026.4)"
   }
 }
