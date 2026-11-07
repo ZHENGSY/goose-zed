@@ -21,9 +21,10 @@ shared library all parse and highlight.
   document and workspace symbols, completion, signature help, inlay hints.
 - Formatting through the server, with `goose format`'s semantics.
 - Snippets: `main`, `fn`, `struct`, `enum`, `for`, `match`, `guard`,
-  `loop`, `let`, `const`, `defer`, `extern "lib"` blocks, and the full array
+  `loop`, `let`, `const`, `defer`, `extern "lib"` blocks, the full array
   family (`T[k]`, `T[]`, `T[..]`, `T[..k]`, `T[>..]` grow-only, `T[>..<]`
-  grow-shrink, `reusable`).
+  grow-shrink, `reusable` — deprecated in v2026.4), and the v2026.4
+  `slot_pool`/`slice_pool` replacements.
 - Tasks: `goose run`, `goose check`, `goose build` (task runner), and a run
   button above `fn main`.
 - The Goose LSP's semantic tokens, when enabled in Zed with
@@ -31,8 +32,9 @@ shared library all parse and highlight.
 
 ## Requirements
 
-A Goose compiler that has `goose lsp` (run `goose lsp --help` to check). The
-extension looks for it in this order:
+A Goose compiler that has `goose lsp` (run `goose lsp --help` to check) —
+v2026.4 or newer for the grammar and the formatting this extension ships with.
+The extension looks for it in this order:
 
 1. `lsp.goose.binary.path` from Zed settings;
 2. `goose` on `$PATH` (Zed uses your login shell's `PATH`);
@@ -105,7 +107,7 @@ Everything lives under `lsp.goose` in Zed's `settings.json`:
     "goose": {
       // Optional: a compiler outside $PATH.
       "binary": {
-        "path": "/Users/me/goose-v2026.3-macos-arm64/goose",
+        "path": "/Users/me/goose-v2026.4-macos-arm64/goose",
         // Optional: defaults to ["lsp"]. Use e.g. ["lsp", "--stdlib", "/path/to/stdlib"].
         "arguments": ["lsp"],
         "env": { "GOOSE_STDLIB": "/path/to/goose/stdlib" }
