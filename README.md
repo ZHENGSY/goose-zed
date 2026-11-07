@@ -55,6 +55,24 @@ hang at `downloading wasi-sdk`. Either wait, or fetch
 yourself, extract it so that `bin/clang` sits directly in
 `extensions/build/wasi-sdk/`, then install the dev extension again.
 
+### Troubleshooting: "already exists, but is not a git clone of ..."
+
+Zed caches each grammar as a git clone under `grammars/goose/` inside the
+extension directory, and only reuses that clone when its `origin` matches the
+`repository` URL in `extension.toml`. If the manifest's grammar repository
+changed since the last install (for example, from a local `file://` URL to the
+published GitHub URL), the stale clone fails the check and installation aborts
+with:
+
+```text
+Failed to install dev extension: compiling grammar 'goose'
+    grammar directory ".../zed/grammars/goose" already exists,
+    but is not a git clone of 'https://github.com/ZHENGSY/goose-zed'
+```
+
+The clone is a disposable build artifact: delete `grammars/goose/` and install
+the dev extension again, and Zed will clone the repository fresh.
+
 The grammar in `tree-sitter-goose/` is checked in already generated
 (`src/parser.c`), because Zed compiles the parser and does not run
 `tree-sitter generate` itself. `extension.toml` points Zed at this directory
