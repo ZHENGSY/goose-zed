@@ -17,5 +17,5 @@ languages = ["Goose"]
 # compiles the checked-in parser at `path`. `rev` points at a commit on main
 # that contains the generated `src/parser.c`.
 repository = "https://github.com/ZHENGSY/goose-zed"
-rev = "3ade04b939aa171f4a7be2e9e94aa42cf7d00fa2"
+rev = "20f5a750fefe3f2d246b2b851b0d13887d10a716"
 path = "tree-sitter-goose"
