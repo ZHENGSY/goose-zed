@@ -120,6 +120,10 @@
         "named": true
       },
       {
+        "type": "variant_constant",
+        "named": true
+      },
+      {
         "type": "while_expression",
         "named": true
       }
@@ -409,6 +413,10 @@
           {
             "type": "unary_expression",
             "named": true
+          },
+          {
+            "type": "variant_constant",
+            "named": true
           }
         ]
       },
@@ -511,6 +519,10 @@
             "named": true
           },
           {
+            "type": "const_query",
+            "named": true
+          },
+          {
             "type": "field_expression",
             "named": true
           },
@@ -564,6 +576,10 @@
           },
           {
             "type": "unary_expression",
+            "named": true
+          },
+          {
+            "type": "variant_constant",
             "named": true
           }
         ]
@@ -683,6 +699,10 @@
             "named": true
           },
           {
+            "type": "const_query",
+            "named": true
+          },
+          {
             "type": "field_expression",
             "named": true
           },
@@ -736,6 +756,10 @@
           },
           {
             "type": "unary_expression",
+            "named": true
+          },
+          {
+            "type": "variant_constant",
             "named": true
           }
         ]
@@ -792,6 +816,10 @@
         },
         {
           "type": "const_for_statement",
+          "named": true
+        },
+        {
+          "type": "const_if_statement",
           "named": true
         },
         {
@@ -900,6 +928,10 @@
         },
         {
           "type": "variable_declaration",
+          "named": true
+        },
+        {
+          "type": "variant_constant",
           "named": true
         },
         {
@@ -1034,6 +1066,10 @@
           {
             "type": "struct_literal",
             "named": true
+          },
+          {
+            "type": "variant_constant",
+            "named": true
           }
         ]
       },
@@ -1148,6 +1184,10 @@
           {
             "type": "struct_literal",
             "named": true
+          },
+          {
+            "type": "variant_constant",
+            "named": true
           }
         ]
       }
@@ -1188,6 +1228,10 @@
       "types": [
         {
           "type": "const_for_arms",
+          "named": true
+        },
+        {
+          "type": "const_if_arms",
           "named": true
         },
         {
@@ -1299,6 +1343,390 @@
     "children": {
       "multiple": true,
       "required": false,
+      "types": [
+        {
+          "type": "_type",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "const_if_arms",
+    "named": true,
+    "fields": {
+      "condition": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "array_literal",
+            "named": true
+          },
+          {
+            "type": "binary_expression",
+            "named": true
+          },
+          {
+            "type": "boolean_literal",
+            "named": true
+          },
+          {
+            "type": "call_expression",
+            "named": true
+          },
+          {
+            "type": "cast_expression",
+            "named": true
+          },
+          {
+            "type": "char_literal",
+            "named": true
+          },
+          {
+            "type": "const_query",
+            "named": true
+          },
+          {
+            "type": "field_expression",
+            "named": true
+          },
+          {
+            "type": "float_literal",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "index_expression",
+            "named": true
+          },
+          {
+            "type": "int_literal",
+            "named": true
+          },
+          {
+            "type": "null",
+            "named": true
+          },
+          {
+            "type": "parenthesized_expression",
+            "named": true
+          },
+          {
+            "type": "raw_string_literal",
+            "named": true
+          },
+          {
+            "type": "scoped_identifier",
+            "named": true
+          },
+          {
+            "type": "self",
+            "named": true
+          },
+          {
+            "type": "slice_expression",
+            "named": true
+          },
+          {
+            "type": "string_literal",
+            "named": true
+          },
+          {
+            "type": "struct_literal",
+            "named": true
+          },
+          {
+            "type": "unary_expression",
+            "named": true
+          },
+          {
+            "type": "variant_constant",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "const_for_arms",
+          "named": true
+        },
+        {
+          "type": "const_if_arms",
+          "named": true
+        },
+        {
+          "type": "match_arm",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "const_if_initializer",
+    "named": true,
+    "fields": {
+      "alternative": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "initializer_list",
+            "named": true
+          }
+        ]
+      },
+      "condition": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "array_literal",
+            "named": true
+          },
+          {
+            "type": "binary_expression",
+            "named": true
+          },
+          {
+            "type": "boolean_literal",
+            "named": true
+          },
+          {
+            "type": "call_expression",
+            "named": true
+          },
+          {
+            "type": "cast_expression",
+            "named": true
+          },
+          {
+            "type": "char_literal",
+            "named": true
+          },
+          {
+            "type": "const_query",
+            "named": true
+          },
+          {
+            "type": "field_expression",
+            "named": true
+          },
+          {
+            "type": "float_literal",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "index_expression",
+            "named": true
+          },
+          {
+            "type": "int_literal",
+            "named": true
+          },
+          {
+            "type": "null",
+            "named": true
+          },
+          {
+            "type": "parenthesized_expression",
+            "named": true
+          },
+          {
+            "type": "raw_string_literal",
+            "named": true
+          },
+          {
+            "type": "scoped_identifier",
+            "named": true
+          },
+          {
+            "type": "self",
+            "named": true
+          },
+          {
+            "type": "slice_expression",
+            "named": true
+          },
+          {
+            "type": "string_literal",
+            "named": true
+          },
+          {
+            "type": "struct_literal",
+            "named": true
+          },
+          {
+            "type": "unary_expression",
+            "named": true
+          },
+          {
+            "type": "variant_constant",
+            "named": true
+          }
+        ]
+      },
+      "consequence": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "initializer_list",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "const_if_statement",
+    "named": true,
+    "fields": {
+      "alternative": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "block",
+            "named": true
+          }
+        ]
+      },
+      "condition": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "array_literal",
+            "named": true
+          },
+          {
+            "type": "binary_expression",
+            "named": true
+          },
+          {
+            "type": "boolean_literal",
+            "named": true
+          },
+          {
+            "type": "call_expression",
+            "named": true
+          },
+          {
+            "type": "cast_expression",
+            "named": true
+          },
+          {
+            "type": "char_literal",
+            "named": true
+          },
+          {
+            "type": "const_query",
+            "named": true
+          },
+          {
+            "type": "field_expression",
+            "named": true
+          },
+          {
+            "type": "float_literal",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "index_expression",
+            "named": true
+          },
+          {
+            "type": "int_literal",
+            "named": true
+          },
+          {
+            "type": "null",
+            "named": true
+          },
+          {
+            "type": "parenthesized_expression",
+            "named": true
+          },
+          {
+            "type": "raw_string_literal",
+            "named": true
+          },
+          {
+            "type": "scoped_identifier",
+            "named": true
+          },
+          {
+            "type": "self",
+            "named": true
+          },
+          {
+            "type": "slice_expression",
+            "named": true
+          },
+          {
+            "type": "string_literal",
+            "named": true
+          },
+          {
+            "type": "struct_literal",
+            "named": true
+          },
+          {
+            "type": "unary_expression",
+            "named": true
+          },
+          {
+            "type": "variant_constant",
+            "named": true
+          }
+        ]
+      },
+      "consequence": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "block",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "const_query",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
       "types": [
         {
           "type": "_type",
@@ -1584,6 +2012,10 @@
         {
           "type": "unary_expression",
           "named": true
+        },
+        {
+          "type": "variant_constant",
+          "named": true
         }
       ]
     }
@@ -1821,6 +2253,10 @@
           },
           {
             "type": "struct_literal",
+            "named": true
+          },
+          {
+            "type": "variant_constant",
             "named": true
           }
         ]
@@ -2192,6 +2628,10 @@
           "named": true
         },
         {
+          "type": "const_if_statement",
+          "named": true
+        },
+        {
           "type": "continue_expression",
           "named": true
         },
@@ -2297,6 +2737,10 @@
         },
         {
           "type": "variable_declaration",
+          "named": true
+        },
+        {
+          "type": "variant_constant",
           "named": true
         },
         {
@@ -2541,6 +2985,10 @@
           {
             "type": "unary_expression",
             "named": true
+          },
+          {
+            "type": "variant_constant",
+            "named": true
           }
         ]
       },
@@ -2649,6 +3097,10 @@
           {
             "type": "struct_literal",
             "named": true
+          },
+          {
+            "type": "variant_constant",
+            "named": true
           }
         ]
       }
@@ -2663,11 +3115,7 @@
         "required": true,
         "types": [
           {
-            "type": "identifier",
-            "named": true
-          },
-          {
-            "type": "scoped_identifier",
+            "type": "storage_name",
             "named": true
           }
         ]
@@ -2698,6 +3146,10 @@
         },
         {
           "type": "const_for_initializer",
+          "named": true
+        },
+        {
+          "type": "const_if_initializer",
           "named": true
         },
         {
@@ -2778,6 +3230,10 @@
       "types": [
         {
           "type": "const_for_arms",
+          "named": true
+        },
+        {
+          "type": "const_if_arms",
           "named": true
         },
         {
@@ -2990,6 +3446,10 @@
         {
           "type": "_expression",
           "named": true
+        },
+        {
+          "type": "const_query",
+          "named": true
         }
       ]
     }
@@ -3142,11 +3602,7 @@
         "required": false,
         "types": [
           {
-            "type": "identifier",
-            "named": true
-          },
-          {
-            "type": "scoped_identifier",
+            "type": "storage_name",
             "named": true
           }
         ]
@@ -3379,6 +3835,10 @@
           {
             "type": "struct_literal",
             "named": true
+          },
+          {
+            "type": "variant_constant",
+            "named": true
           }
         ]
       }
@@ -3475,6 +3935,36 @@
         },
         {
           "type": "variable_declaration",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "storage_name",
+    "named": true,
+    "fields": {
+      "field": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "scoped_identifier",
           "named": true
         }
       ]
@@ -3708,6 +4198,10 @@
             "named": true
           },
           {
+            "type": "const_query",
+            "named": true
+          },
+          {
             "type": "field_expression",
             "named": true
           },
@@ -3761,6 +4255,10 @@
           },
           {
             "type": "unary_expression",
+            "named": true
+          },
+          {
+            "type": "variant_constant",
             "named": true
           }
         ]
@@ -3875,6 +4373,46 @@
           },
           {
             "type": "variant_type",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "variant_constant",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "scoped_identifier",
+            "named": true
+          }
+        ]
+      },
+      "type_arguments": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "type_arguments",
+            "named": true
+          }
+        ]
+      },
+      "variant": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
             "named": true
           }
         ]
@@ -4359,6 +4897,10 @@
   },
   {
     "type": "reusable",
+    "named": false
+  },
+  {
+    "type": "root",
     "named": false
   },
   {

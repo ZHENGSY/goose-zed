@@ -219,5 +219,24 @@
       "}"
     ],
     "description": "Infinite loop"
+  },
+  "Extern block": {
+    "prefix": "externlib",
+    "body": [
+      "extern \"${1:SDL2}\" {",
+      "\tfn ${2:SDL_Init}(flags: u32) -> i32;",
+      "\t$0",
+      "}"
+    ],
+    "description": "Functions bound from a shared library by name"
+  },
+  "Defer block": {
+    "prefix": "deferb",
+    "body": [
+      "defer {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Run a block when the enclosing block exits"
   }
 }

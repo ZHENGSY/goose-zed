@@ -6,7 +6,10 @@ The Goose compiler is its own language server: `goose lsp` speaks the Language
 Server Protocol on stdin and stdout. This extension gives Zed a Goose language
 (treesitter grammar, highlighting, brackets, indentation, outline, snippets)
 and starts that server for diagnostics, hover, go to definition, references,
-rename, symbols, completion, signature help, inlay hints and folding.
+rename, symbols, completion, signature help, inlay hints, folding and
+formatting. The grammar tracks Goose v2026.4: `defer`, `root` structs,
+`const if`, variant constants and `extern "lib" { … }` blocks bound from a
+shared library all parse and highlight.
 
 ## Features
 
@@ -16,9 +19,11 @@ rename, symbols, completion, signature help, inlay hints and folding.
   indentation, folding and document/workspace outline.
 - Diagnostics as you type, hover, go to definition, find references, rename,
   document and workspace symbols, completion, signature help, inlay hints.
+- Formatting through the server, with `goose format`'s semantics.
 - Snippets: `main`, `fn`, `struct`, `enum`, `for`, `match`, `guard`,
-  `loop`, `let`, `const`, and the full array family (`T[k]`, `T[]`, `T[..]`,
-  `T[..k]`, `T[>..]` grow-only, `T[>..<]` grow-shrink, `reusable`).
+  `loop`, `let`, `const`, `defer`, `extern "lib"` blocks, and the full array
+  family (`T[k]`, `T[]`, `T[..]`, `T[..k]`, `T[>..]` grow-only, `T[>..<]`
+  grow-shrink, `reusable`).
 - Tasks: `goose run`, `goose check`, `goose build` (task runner), and a run
   button above `fn main`.
 - The Goose LSP's semantic tokens, when enabled in Zed with
@@ -137,6 +142,7 @@ The tasks use `goose` from `$PATH`. If the compiler is not on `PATH`, edit
 | Completion and signature help | yes | |
 | Inlay hints | yes | enable in Zed settings if off |
 | Folding | yes | tree-sitter, plus the server's ranges |
+| Formatting | yes | the server formats as `goose format` does |
 | Semantic tokens | yes | `"semantic_tokens": "combined"` |
 | Code lenses | partial | with `"code_lens": "on"`, the server's instantiation counts appear; its `Run` lens needs a client command that Zed extensions cannot register, so it is not offered |
 | Debugging | no | Goose's server does not implement DAP |

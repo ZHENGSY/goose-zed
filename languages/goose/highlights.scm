@@ -59,13 +59,27 @@
 (range_pattern (identifier) @constant @variant)
 (negative_pattern (identifier) @constant @variant)
 
+; A variant used as a constant: `Event.Limit` where a value is wanted, and
+; `Shape.Dot` read as a constant (`Event.Limit` standing for itself).
+(variant_constant name: (identifier) @type)
+(variant_constant name: (scoped_identifier name: (identifier) @type))
+(variant_constant variant: (identifier) @constant @variant)
+
 ; A payload-less variant: `Shape.Dot`. Types and variants are PascalCase by
 ; convention, which separates them from a field read.
 ((field_expression value: (identifier) @type field: (identifier) @constant @variant)
  (#match? @type "^[A-Z]")
  (#match? @constant "^[A-Z]"))
 
+; `const if (query)` picks a fragment list at specialization time; its query
+; names are keywords there and nowhere else.
+(const_query name: (identifier) @keyword)
+
 (function_modifier) @keyword
+
+; Functions bound from a shared library in `extern "lib" { … }`.
+(extern_member name: (identifier) @function.definition)
+(extern_member name: (scoped_identifier name: (identifier) @function.definition))
 
 [
   "fn"
@@ -78,6 +92,8 @@
   "const"
   "pad"
   "reusable"
+  "root"
+  "extern"
   "namespace"
   "defer"
   "fields"

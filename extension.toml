@@ -1,8 +1,8 @@
 id = "goose"
 name = "Goose"
-version = "0.1.1"
+version = "0.2.0"
 schema_version = 1
-description = "Goose language support: syntax highlighting, the Goose language server (diagnostics, hover, go to definition, references, rename, symbols, completion, signature help, inlay hints, folding), snippets and run tasks."
+description = "Goose language support: syntax highlighting, the Goose language server (diagnostics, hover, go to definition, references, rename, symbols, completion, signature help, inlay hints, folding, formatting), snippets and run tasks."
 authors = ["Simon Zheng"]
 repository = "https://github.com/ZHENGSY/goose-zed"
 
