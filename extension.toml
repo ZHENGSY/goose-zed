@@ -1,6 +1,6 @@
 id = "goose"
 name = "Goose"
-version = "0.2.0"
+version = "0.2.1"
 schema_version = 1
 description = "Goose language support: syntax highlighting, the Goose language server (diagnostics, hover, go to definition, references, rename, symbols, completion, signature help, inlay hints, folding, formatting), snippets and run tasks."
 authors = ["Simon Zheng"]
@@ -13,9 +13,11 @@ name = "Goose LSP"
 languages = ["Goose"]
 
 [grammars.goose]
-# The grammar lives in this repository; Zed's grammar loader clones it and
-# compiles the checked-in parser at `path`. `rev` points at a commit on main
-# that contains the generated `src/parser.c`.
-repository = "https://github.com/ZHENGSY/goose-zed"
-rev = "20f5a750fefe3f2d246b2b851b0d13887d10a716"
-path = "tree-sitter-goose"
+# The grammar lives upstream, in the compiler's repository. Since
+# aardappel/goose#320, `tree-sitter/src/parser.c` and
+# `tree-sitter/src/tree_sitter/parser.h` are checked in, so Zed's grammar
+# loader can clone that tree and compile the parser at `path` without running
+# the tree-sitter CLI. `rev` is a commit on master that contains both.
+repository = "https://github.com/aardappel/goose"
+rev = "9412b80f52d833c4697cffdbbf1f4eeb5195cd41"
+path = "tree-sitter"

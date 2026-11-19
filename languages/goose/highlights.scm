@@ -1,8 +1,21 @@
 ; Goose syntax highlighting for Zed.
 ;
-; Capture names are Zed's (the grammar's own query in
-; tree-sitter-goose/queries/highlights.scm uses nvim-style names). Later
-; patterns win where two cover the same bytes, so broad rules come first.
+; Copied from the grammar's own query,
+; https://github.com/aardappel/goose/blob/9412b80f52d833c4697cffdbbf1f4eeb5195cd41/tree-sitter/queries/highlights.scm,
+; and adapted to Zed's capture names:
+;
+;   @module           -> @namespace
+;   @variable.builtin -> @variable.special
+;   @character        -> @string
+;   @escape           -> @string.escape
+;
+; The remaining dotted names (@function.call, @keyword.modifier, …) are kept
+; as they are: Zed resolves an unknown capture to its longest parent capture
+; that the theme defines, so @function.call falls back to @function. Captures
+; written one after another on the same node are fallbacks too, resolved
+; right-to-left: @constant @variant uses @variant in themes that define it and
+; @constant otherwise. Later patterns win where two cover the same bytes, so
+; broad rules come first.
 
 (identifier) @variable
 
@@ -10,25 +23,24 @@
 ((identifier) @variable.special
  (#eq? @variable.special "it"))
 
-(self) @variable.special
-(wildcard_pattern) @variable.special
-
 (parameter name: (identifier) @variable.parameter)
 (function_value_parameter name: (identifier) @variable.parameter)
 
-; Fields, and the name in `Name { field: value }`.
 (field_declaration name: (identifier) @property)
 (field_expression field: (identifier) @property)
 (field_initializer name: (identifier) @property)
+(storage_name field: (identifier) @property)
 
-; Modules and namespaces.
 (namespace_declaration name: (identifier) @namespace)
+(namespace_alias name: (identifier) @namespace)
+(namespace_alias target: (identifier) @namespace)
 (import_path (identifier) @namespace)
 (scoped_identifier namespace: (identifier) @namespace)
 
-; Functions.
-(function_declaration name: (identifier) @function.definition)
-(function_declaration name: (scoped_identifier name: (identifier) @function.definition))
+(function_declaration name: (identifier) @function)
+(function_declaration name: (scoped_identifier name: (identifier) @function))
+(extern_member name: (identifier) @function)
+(extern_member name: (scoped_identifier name: (identifier) @function))
 (call_expression function: (identifier) @function.call)
 (call_expression function: (scoped_identifier name: (identifier) @function.call))
 ; A call through a dot is a method call or a call of a free function by UFCS.
@@ -36,34 +48,29 @@
 (return_expression target: (identifier) @function)
 (return_expression target: (scoped_identifier name: (identifier) @function))
 
-; Types.
-(struct_declaration name: (identifier) @type.definition)
-(struct_declaration name: (scoped_identifier name: (identifier) @type.definition))
-(enum_declaration name: (identifier) @type.definition)
-(enum_declaration name: (scoped_identifier name: (identifier) @type.definition))
-(type_alias_declaration name: (identifier) @type.definition)
-(type_alias_declaration name: (scoped_identifier name: (identifier) @type.definition))
+(struct_declaration name: (identifier) @type)
+(struct_declaration name: (scoped_identifier name: (identifier) @type))
+(enum_declaration name: (identifier) @type)
+(enum_declaration name: (scoped_identifier name: (identifier) @type))
+(type_alias_declaration name: (identifier) @type)
+(type_alias_declaration name: (scoped_identifier name: (identifier) @type))
 (type_parameter name: (identifier) @type)
 (named_type name: (identifier) @type)
 (named_type name: (scoped_identifier name: (identifier) @type))
 (struct_literal name: (identifier) @type)
 (struct_literal name: (scoped_identifier name: (identifier) @type))
+(variant_constant name: (identifier) @type)
+(variant_constant name: (scoped_identifier name: (identifier) @type))
 (primitive_type) @type.builtin
 
-; Enum variants.
 (enum_variant name: (identifier) @constant @variant)
 (variant_type variant: (identifier) @constant @variant)
 (struct_literal variant: (identifier) @constant @variant)
+(variant_constant variant: (identifier) @constant @variant)
 (variant_pattern variant: (identifier) @constant @variant)
 (pattern_list (identifier) @constant @variant)
 (range_pattern (identifier) @constant @variant)
 (negative_pattern (identifier) @constant @variant)
-
-; A variant used as a constant: `Event.Limit` where a value is wanted, and
-; `Shape.Dot` read as a constant (`Event.Limit` standing for itself).
-(variant_constant name: (identifier) @type)
-(variant_constant name: (scoped_identifier name: (identifier) @type))
-(variant_constant variant: (identifier) @constant @variant)
 
 ; A payload-less variant: `Shape.Dot`. Types and variants are PascalCase by
 ; convention, which separates them from a field read.
@@ -71,15 +78,15 @@
  (#match? @type "^[A-Z]")
  (#match? @constant "^[A-Z]"))
 
-; `const if (query)` picks a fragment list at specialization time; its query
-; names are keywords there and nowhere else.
+(self) @variable.special
+(wildcard_pattern) @variable.special
+
+(function_modifier) @keyword.modifier
+"root" @keyword.modifier
+(extern_block "extern" @keyword.modifier)
+
+; The queries of a const if condition, keywords there only.
 (const_query name: (identifier) @keyword)
-
-(function_modifier) @keyword
-
-; Functions bound from a shared library in `extern "lib" { … }`.
-(extern_member name: (identifier) @function.definition)
-(extern_member name: (scoped_identifier name: (identifier) @function.definition))
 
 [
   "fn"
@@ -92,9 +99,8 @@
   "const"
   "pad"
   "reusable"
-  "root"
-  "extern"
   "namespace"
+  "block"
   "defer"
   "fields"
   "variants"
@@ -103,31 +109,34 @@
   "upto"
 ] @keyword
 
-"as" @operator
+"as" @keyword.operator
 
 [
   "import"
   "from"
-] @keyword
+] @keyword.import
+
+"return" @keyword.return
 
 [
   "if"
   "else"
   "match"
   "guard"
+] @keyword.conditional
+
+[
   "while"
   "for"
   "loop"
   "break"
   (continue_expression)
-  "return"
-  "block"
-] @keyword.control
+] @keyword.repeat
 
 (boolean_literal) @boolean
 (null) @constant.builtin
 (int_literal) @number
-(float_literal) @number
+(float_literal) @number.float
 (char_literal) @string
 (string_literal) @string
 (raw_string_literal) @string
@@ -155,7 +164,8 @@
   "," ";" ":" "::" "."
 ] @punctuation.delimiter
 
-; Builtins at the end, so they win over the generic call patterns.
+; Builtins at the end, so they win over the generic call patterns. This rule
+; is Zed-only; the grammar's query leaves builtins as plain calls.
 ((call_expression function: (identifier) @function.builtin)
  (#any-of? @function.builtin
    "print" "str" "format" "assert" "abort" "exit" "hardware_threads"

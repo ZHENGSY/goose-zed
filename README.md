@@ -7,9 +7,10 @@ Server Protocol on stdin and stdout. This extension gives Zed a Goose language
 (treesitter grammar, highlighting, brackets, indentation, outline, snippets)
 and starts that server for diagnostics, hover, go to definition, references,
 rename, symbols, completion, signature help, inlay hints, folding and
-formatting. The grammar tracks Goose v2026.4: `defer`, `root` structs,
-`const if`, variant constants and `extern "lib" { … }` blocks bound from a
-shared library all parse and highlight.
+formatting. The grammar is the one upstream ships in `tree-sitter/`, pinned by
+`rev`: `defer`, `root` structs, `const if`, variant constants, numeric
+separators and `extern "lib" { … }` blocks bound from a shared library all
+parse and highlight.
 
 ## Features
 
@@ -66,36 +67,49 @@ yourself, extract it so that `bin/clang` sits directly in
 
 Zed caches each grammar as a git clone under `grammars/goose/` inside the
 extension directory, and only reuses that clone when its `origin` matches the
-`repository` URL in `extension.toml`. If the manifest's grammar repository
-changed since the last install (for example, from a local `file://` URL to the
-published GitHub URL), the stale clone fails the check and installation aborts
-with:
+`repository` URL in `extension.toml`. Version 0.2.1 moved the grammar from
+this repository to upstream's, now that upstream checks in the generated
+parser, so the stale clone fails the check and installation aborts with:
 
 ```text
 Failed to install dev extension: compiling grammar 'goose'
     grammar directory ".../zed/grammars/goose" already exists,
-    but is not a git clone of 'https://github.com/ZHENGSY/goose-zed'
+    but is not a git clone of 'https://github.com/aardappel/goose'
 ```
 
 The clone is a disposable build artifact: delete `grammars/goose/` and install
 the dev extension again, and Zed will clone the repository fresh.
 
-The grammar in `tree-sitter-goose/` is checked in already generated
-(`src/parser.c`), because Zed compiles the parser and does not run
-`tree-sitter generate` itself. `extension.toml` points Zed at this directory
-through the published repository URL, with `rev` set to a commit on `main`
-that contains the generated parser.
+### Grammar and queries
 
-If you change `grammar.js`, regenerate the parser from `tree-sitter-goose/`:
+Zed compiles a grammar from a git checkout; it does not run `tree-sitter
+generate`. Since [aardappel/goose#320](https://github.com/aardappel/goose/pull/320),
+upstream checks in the generated `tree-sitter/src/parser.c` and
+`tree-sitter/src/tree_sitter/parser.h`, so `extension.toml` points straight at
+upstream:
 
-```sh
-npm install                 # installs the pinned tree-sitter CLI
-npx tree-sitter generate    # writes src/parser.c and friends
-npx tree-sitter test        # runs the corpus
+```toml
+[grammars.goose]
+repository = "https://github.com/aardappel/goose"
+rev = "9412b80f52d833c4697cffdbbf1f4eeb5195cd41"
+path = "tree-sitter"
 ```
 
-Then install the dev extension again so Zed rebuilds the grammar, and update
-`rev` in `extension.toml` if you are distributing the extension.
+To follow a newer grammar, set `rev` to a commit on upstream `master` whose
+`tree-sitter/src/parser.c` is current with `grammar.js` (upstream's
+`python tree-sitter/build.py` regenerates and checks it). Nothing is vendored
+in this repository any more, so there is no parser to regenerate here.
+
+Zed does not read the query files that live next to a grammar; it looks in
+`languages/goose/`. `languages/goose/highlights.scm` is therefore a manual copy
+of upstream's `tree-sitter/queries/highlights.scm`, adapted to Zed's capture
+names (`@module` → `@namespace`, `@variable.builtin` → `@variable.special`,
+`@character` → `@string`, `@escape` → `@string.escape`; the file's header lists
+them all, and the builtins-in-call-position rule is added here). When you bump
+`rev`, copy that revision's `highlights.scm` over and reapply the adaptations.
+The other queries — `brackets`, `indents`, `outline`, `overrides`, `runnables`,
+`textobjects` — are Zed-specific and have no upstream counterpart; upstream's
+`queries/helix/` and `queries/tags.scm` are for Helix and are not used here.
 
 ## Settings
 
@@ -152,10 +166,10 @@ The tasks use `goose` from `$PATH`. If the compiler is not on `PATH`, edit
 ## Publishing
 
 This directory is laid out as a standalone extension repository at
-[github.com/ZHENGSY/goose-zed](https://github.com/ZHENGSY/goose-zed), with the
-grammar vendored in `tree-sitter-goose/`. `extension.toml` already points
-`repository` at that URL and `rev` at a commit that contains the generated
-`src/parser.c`.
+[github.com/ZHENGSY/goose-zed](https://github.com/ZHENGSY/goose-zed).
+`extension.toml` points its own `repository` at that URL and its grammar at
+upstream's `tree-sitter/` directory, with `rev` set to a commit that contains
+the generated `src/parser.c`.
 
 To publish to the Zed extension registry, open a PR against
 [zed-industries/extensions](https://github.com/zed-industries/extensions)
@@ -166,8 +180,8 @@ git submodule add https://github.com/ZHENGSY/goose-zed extensions/goose
 ```
 
 and add a matching entry to that repo's top-level `extensions.toml`. After a
-grammar change, bump `rev` here to the new commit that contains the regenerated
-parser before submitting.
+grammar change, bump the grammar's `rev` and sync `languages/goose/highlights.scm`
+from the same upstream revision before submitting.
 
-The grammar is derived from `aardappel/goose`'s `tree-sitter/` directory and
-is Apache-2.0, like Goose itself.
+The grammar belongs to `aardappel/goose` and is Apache-2.0, like Goose itself;
+this extension only ships the Zed-specific queries and configuration.
