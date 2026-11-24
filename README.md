@@ -95,7 +95,7 @@ upstream:
 ```toml
 [grammars.goose]
 repository = "https://github.com/aardappel/goose"
-rev = "9412b80f52d833c4697cffdbbf1f4eeb5195cd41"
+rev = "2239b92eb2ae0e8f390f98640b09ff57a17698fc"
 path = "tree-sitter"
 ```
 
