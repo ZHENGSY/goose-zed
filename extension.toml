@@ -1,6 +1,6 @@
 id = "goose"
 name = "Goose"
-version = "0.2.1"
+version = "0.2.2"
 schema_version = 1
 description = "Goose language support: syntax highlighting, the Goose language server (diagnostics, hover, go to definition, references, rename, symbols, completion, signature help, inlay hints, folding, formatting), snippets and run tasks."
 authors = ["Simon Zheng"]
@@ -19,5 +19,5 @@ languages = ["Goose"]
 # loader can clone that tree and compile the parser at `path` without running
 # the tree-sitter CLI. `rev` is a commit on master that contains both.
 repository = "https://github.com/aardappel/goose"
-rev = "9412b80f52d833c4697cffdbbf1f4eeb5195cd41"
+rev = "2239b92eb2ae0e8f390f98640b09ff57a17698fc"
 path = "tree-sitter"

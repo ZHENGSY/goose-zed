@@ -14,6 +14,13 @@ use zed_extension_api::{
 const LANGUAGE_SERVER_ID: &str = "goose";
 const GOOSE_REPOSITORY: &str = "aardappel/goose";
 
+/// Entry files in the layouts a Goose project usually has, looked for in the
+/// worktree root. `goose lsp` analyzes each open file as a program of its own
+/// unless it is told which program the file belongs to, so the extension names
+/// the entry file itself when the project is laid out this way; a project that
+/// is not needs `lsp.goose.initialization_options.entryFiles` as before.
+const ENTRY_FILE_CANDIDATES: [&str; 2] = ["main.goose", "src/main.goose"];
+
 struct GooseExtension {
     cached_binary_path: Option<String>,
 }
@@ -28,9 +35,9 @@ impl GooseExtension {
     /// The compiler to start, the arguments to pass it, and the environment.
     ///
     /// The order is: the user's `lsp.goose.binary.path`, then `goose` on
-    /// `$PATH`, then a prebuilt release downloaded from GitHub. Any of those
-    /// can be overridden with `lsp.goose.binary.{path,arguments,env}` in Zed's
-    /// settings.
+    /// `$PATH`, then `goose` in `~/.local/bin`, then a prebuilt release
+    /// downloaded from GitHub. Any of those can be overridden with
+    /// `lsp.goose.binary.{path,arguments,env}` in Zed's settings.
     fn binary(
         &mut self,
         language_server_id: &LanguageServerId,
@@ -53,7 +60,8 @@ impl GooseExtension {
             }
         }
 
-        let path = if let Some(path) = worktree.which("goose") {
+        let path = if let Some(path) = worktree.which("goose").or_else(|| home_local_bin(worktree))
+        {
             path
         } else if let Some(path) = self
             .cached_binary_path
@@ -185,17 +193,29 @@ impl zed::Extension for GooseExtension {
     }
 
     /// `entryFiles` (absolute paths) tells the server which programs to analyze,
-    /// so imported modules get the errors of the program that imports them. The
-    /// user sets it in `lsp.goose.initialization_options`; with none, the server
-    /// analyzes each open file as a program of its own.
+    /// so imported modules get the errors of the program that imports them. A
+    /// user who sets it in `lsp.goose.initialization_options` decides it; with
+    /// none, the entry file of a conventional layout (`main.goose` or
+    /// `src/main.goose` in the worktree root) is named, and failing that the
+    /// server analyzes each open file as a program of its own.
     fn language_server_initialization_options(
         &mut self,
         _language_server_id: &LanguageServerId,
         worktree: &Worktree,
     ) -> Result<Option<serde_json::Value>> {
-        Ok(LspSettings::for_worktree(LANGUAGE_SERVER_ID, worktree)
+        if let Some(options) = LspSettings::for_worktree(LANGUAGE_SERVER_ID, worktree)
             .ok()
-            .and_then(|settings| settings.initialization_options))
+            .and_then(|settings| settings.initialization_options)
+        {
+            return Ok(Some(options));
+        }
+
+        let entry_file = ENTRY_FILE_CANDIDATES
+            .iter()
+            .find(|candidate| worktree.read_text_file(candidate).is_ok())
+            .map(|candidate| absolute(worktree, candidate));
+
+        Ok(entry_file.map(|entry_file| serde_json::json!({ "entryFiles": [entry_file] })))
     }
 }
 
@@ -225,6 +245,32 @@ fn base_environment(
     }
 
     env
+}
+
+/// `goose` installed by the compiler's own instructions lands in
+/// `~/.local/bin`, which a sandboxed editor does not have on `PATH` even when
+/// the user's shell does.
+fn home_local_bin(worktree: &Worktree) -> Option<String> {
+    if matches!(zed::current_platform().0, zed::Os::Windows) {
+        return None;
+    }
+
+    let home = worktree
+        .shell_env()
+        .into_iter()
+        .find_map(|(name, value)| (name == "HOME").then_some(value))?;
+    let path = format!("{home}/.local/bin/goose");
+
+    fs::metadata(&path)
+        .ok()
+        .filter(|metadata| metadata.is_file())
+        .map(|_| path)
+}
+
+/// The worktree root joined with a path relative to it; the server wants
+/// absolute paths.
+fn absolute(worktree: &Worktree, path: &str) -> String {
+    format!("{}/{}", worktree.root_path().trim_end_matches('/'), path)
 }
 
 /// Searches `directory` and its subdirectories for a file with `name`.

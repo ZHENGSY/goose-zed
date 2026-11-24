@@ -8,9 +8,9 @@ Server Protocol on stdin and stdout. This extension gives Zed a Goose language
 and starts that server for diagnostics, hover, go to definition, references,
 rename, symbols, completion, signature help, inlay hints, folding and
 formatting. The grammar is the one upstream ships in `tree-sitter/`, pinned by
-`rev`: `defer`, `root` structs, `const if`, variant constants, numeric
-separators and `extern "lib" { … }` blocks bound from a shared library all
-parse and highlight.
+`rev`: `defer`, `root` structs, `const if`, variant constants, `deprecated`
+function attributes, numeric separators and `extern "lib" { … }` blocks bound
+from a shared library all parse and highlight.
 
 ## Features
 
@@ -28,6 +28,8 @@ parse and highlight.
   `slot_pool`/`slice_pool` replacements.
 - Tasks: `goose run`, `goose check`, `goose build` (task runner), and a run
   button above `fn main`.
+- The entry file of a project laid out as `main.goose` or `src/main.goose` is
+  found without any settings, so every file of it shows the program's errors.
 - The Goose LSP's semantic tokens, when enabled in Zed with
   `"semantic_tokens": "combined"`.
 
@@ -39,7 +41,9 @@ The extension looks for it in this order:
 
 1. `lsp.goose.binary.path` from Zed settings;
 2. `goose` on `$PATH` (Zed uses your login shell's `PATH`);
-3. the latest prebuilt release from
+3. `goose` in `~/.local/bin`, for editors that sandbox the extension away from
+   the shell's `PATH` and so cannot find it there;
+4. the latest prebuilt release from
    [aardappel/goose releases](https://github.com/aardappel/goose/releases),
    downloaded and cached by Zed.
 
@@ -91,7 +95,7 @@ upstream:
 ```toml
 [grammars.goose]
 repository = "https://github.com/aardappel/goose"
-rev = "9412b80f52d833c4697cffdbbf1f4eeb5195cd41"
+rev = "2239b92eb2ae0e8f390f98640b09ff57a17698fc"
 path = "tree-sitter"
 ```
 
@@ -126,9 +130,11 @@ Everything lives under `lsp.goose` in Zed's `settings.json`:
         "arguments": ["lsp"],
         "env": { "GOOSE_STDLIB": "/path/to/goose/stdlib" }
       },
-      // Optional: the programs to analyze. Each open file is analyzed as its
-      // own program when this is absent, so imported modules only get their
-      // own errors. With entry files, every file shows the program's errors.
+      // Optional: the programs to analyze. Without it, `main.goose` or
+      // `src/main.goose` in the project root is named when it is there;
+      // otherwise each open file is analyzed as its own program, so imported
+      // modules only get their own errors. With entry files, every file shows
+      // the program's errors.
       "initialization_options": {
         "entryFiles": ["/Users/me/project/main.goose"]
       }
